@@ -48,4 +48,12 @@ export class UserService {
     }
     return new UserResponseDto(user);
   }
+
+  async findUserByEmail(email: string) {
+    const user = await this.userRepository.findOneBy({ email });
+    if (!user) {
+      throw new ConflictException('Usuário não encontrado!');
+    }
+    return user;
+  }
 }

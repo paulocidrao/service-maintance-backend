@@ -1,6 +1,8 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import type { AuthenticatedRequest } from 'src/types/authenticated-request-type';
 
 @Controller('user')
 export class UserController {
@@ -10,8 +12,10 @@ export class UserController {
   create(@Body() dto: CreateUserDto) {
     return this.userService.create(dto);
   }
-  @Get('me/:id')
-  findMe(@Param('id') id: string) {
-    return this.userService.findOne(id);
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  findMe(@Req() req: AuthenticatedRequest) {
+    return this.userService.findOne(req.user.id);
   }
 }
