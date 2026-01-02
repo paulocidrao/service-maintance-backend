@@ -1,5 +1,4 @@
 import {
-  Contains,
   IsEmail,
   IsNotEmpty,
   IsPhoneNumber,
@@ -9,7 +8,6 @@ import {
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'o nome não pode ser vazio' })
-  @Contains('^[a-zA-ZÀ-ÿ\\s]*$', { message: 'o nome não pode conter números' })
   @IsString({ message: 'O nome precisa ser uma string' })
   name: string;
 
