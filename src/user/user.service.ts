@@ -36,6 +36,7 @@ export class UserService {
       email: dto.email,
       name: dto.name,
       phone: dto.phone,
+      document: dto.document,
       password: hashedPassword,
     };
     const created = await this.userRepository.save(newUser);

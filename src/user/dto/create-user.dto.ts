@@ -11,6 +11,10 @@ export class CreateUserDto {
   @IsString({ message: 'O nome precisa ser uma string' })
   name: string;
 
+  @IsNotEmpty({ message: 'O CPF não pode ser vazio' })
+  @IsString({ message: 'O CPF preicsa ser numeros ' })
+  document: string;
+
   @IsNotEmpty({ message: 'O email não pode ser vazio' })
   @IsEmail({}, { message: 'Email inválido' })
   email: string;
