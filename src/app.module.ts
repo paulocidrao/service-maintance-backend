@@ -3,10 +3,15 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { BudgetModule } from './budget/budget.module';
+import { JobModule } from './job/job.module';
 
 @Module({
   imports: [
     UserModule,
+    AuthModule,
+    BudgetModule,
+    JobModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       useFactory: () => {
@@ -30,7 +35,6 @@ import { AuthModule } from './auth/auth.module';
         };
       },
     }),
-    AuthModule,
   ],
   controllers: [],
   providers: [],
