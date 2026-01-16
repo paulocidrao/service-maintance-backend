@@ -15,7 +15,7 @@ export class Job {
   @Column()
   deliveryDate: Date;
 
-  @Column({})
+  @Column({ unique: true })
   userCode: string;
 
   @Column()
