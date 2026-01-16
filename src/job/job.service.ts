@@ -4,6 +4,7 @@ import { DataSource, Repository } from 'typeorm';
 import { Budget } from 'src/budget/entities/budget.entity';
 import { CreateJobDto } from './dto/create-job.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { generateRandomCode } from 'src/utils/randomcode';
 @Injectable()
 export class JobService {
   constructor(
@@ -17,8 +18,10 @@ export class JobService {
       userEmail: dto.userEmail,
       deliveryDate: dto.deliveryDate,
       description: dto.description,
+      userCode: generateRandomCode(),
       price: dto.price * 100,
     };
+    console.log('retorno', typeof generateRandomCode());
     const created = await this.dataSource.transaction(async manager => {
       const budget = manager.create(Budget, {
         status: 'pending',

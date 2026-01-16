@@ -15,6 +15,9 @@ export class Job {
   @Column()
   deliveryDate: Date;
 
+  @Column({})
+  userCode: string;
+
   @Column()
   description: string;
 
