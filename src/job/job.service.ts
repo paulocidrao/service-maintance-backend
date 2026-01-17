@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Job } from './entities/job.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Budget } from 'src/budget/entities/budget.entity';
@@ -35,5 +35,36 @@ export class JobService {
       return await manager.save(service);
     });
     return created;
+  }
+
+  private async findOneJobFail(jobData: Partial<Job>) {
+    const job = await this.findOneJob(jobData);
+
+    if (!job) {
+      throw new NotFoundException('Serviço não encontrado!');
+    }
+    return job;
+  }
+
+  async findOneJob(jobData: Partial<Job>) {
+    const job = await this.jobRepository.findOne({
+      where: {
+        ...jobData,
+      },
+      relations: ['budget'],
+    });
+    return job;
+  }
+
+  async findJobByUserCode(jodData: Partial<Job>) {
+    const job = await this.findOneJobFail(jodData);
+
+    await this.jobRepository.findOne({
+      where: {
+        ...jodData,
+      },
+      relations: ['budget'],
+    });
+    return job;
   }
 }
