@@ -17,10 +17,6 @@ export class CreateJobDto {
   userEmail: string;
 
   @IsNotEmpty({ message: 'A data de entrega não pode ser vazia' })
-  @IsOptional()
-  userCode: string;
-
-  @IsNotEmpty({ message: 'A data de entrega não pode ser vazia' })
   @Type(() => Date)
   @IsDate({ message: 'Data inválida' })
   deliveryDate: Date;

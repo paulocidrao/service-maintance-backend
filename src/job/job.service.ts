@@ -18,10 +18,8 @@ export class JobService {
       userEmail: dto.userEmail,
       deliveryDate: dto.deliveryDate,
       description: dto.description,
-      userCode: generateRandomCode(),
       price: dto.price * 100,
     };
-    console.log('retorno', typeof generateRandomCode());
     const created = await this.dataSource.transaction(async manager => {
       const budget = manager.create(Budget, {
         status: 'pending',
@@ -30,6 +28,8 @@ export class JobService {
       const saveBudget = await manager.save(budget);
       const service = manager.create(Job, {
         ...newService,
+        isFinished: false,
+        userCode: generateRandomCode(),
         budget: saveBudget,
       });
       return await manager.save(service);

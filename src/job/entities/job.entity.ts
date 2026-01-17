@@ -1,10 +1,13 @@
 import { Budget } from 'src/budget/entities/budget.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'job' })
 export class Job {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({ default: false })
+  isFinished: boolean;
 
   @Column()
   clientName: string;
