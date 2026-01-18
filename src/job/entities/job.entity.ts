@@ -22,6 +22,9 @@ export class Job {
   userCode: string;
 
   @Column()
+  workerName: string;
+
+  @Column()
   description: string;
 
   @OneToOne(() => Budget, budget => budget.job)

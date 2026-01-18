@@ -12,7 +12,7 @@ export class JobService {
     private readonly jobRepository: Repository<Job>,
     private readonly dataSource: DataSource,
   ) {}
-  async create(dto: CreateJobDto) {
+  async create(dto: CreateJobDto, workerName: string) {
     const newService: CreateJobDto = {
       clientName: dto.clientName,
       userEmail: dto.userEmail,
@@ -29,6 +29,7 @@ export class JobService {
       const service = manager.create(Job, {
         ...newService,
         isFinished: false,
+        workerName: workerName,
         userCode: generateRandomCode(),
         budget: saveBudget,
       });
