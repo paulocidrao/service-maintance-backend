@@ -12,7 +12,7 @@ export class JobService {
     private readonly jobRepository: Repository<Job>,
     private readonly dataSource: DataSource,
   ) {}
-  async create(dto: CreateJobDto, workerName: string) {
+  async create(userId: string, dto: CreateJobDto, workerName: string) {
     const newService: CreateJobDto = {
       clientName: dto.clientName,
       userEmail: dto.userEmail,
@@ -30,6 +30,7 @@ export class JobService {
         ...newService,
         isFinished: false,
         workerName: workerName,
+        ownerId: userId,
         userCode: generateRandomCode(),
         budget: saveBudget,
       });
@@ -67,5 +68,17 @@ export class JobService {
       relations: ['budget'],
     });
     return job;
+  }
+  async findAllJobs(ownerId: string) {
+    const jobs = await this.jobRepository.find({
+      where: {
+        ownerId,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+      relations: ['owner', 'budget'],
+    });
+    return jobs;
   }
 }

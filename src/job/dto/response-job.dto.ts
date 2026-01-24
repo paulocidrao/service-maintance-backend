@@ -8,6 +8,7 @@ export class JobResponseDto {
   readonly deliveryDate: Date;
   readonly isFinished: boolean;
   readonly workerName: string;
+  readonly ownerId: string;
   readonly budget: {
     id: string;
     status: string;
@@ -21,6 +22,7 @@ export class JobResponseDto {
     this.deliveryDate = job.deliveryDate;
     this.isFinished = job.isFinished;
     this.workerName = job.workerName;
+    this.ownerId = job.ownerId;
     this.budget = {
       id: job.budget.id,
       status: job.budget.status,

@@ -1,5 +1,14 @@
 import { Budget } from 'src/budget/entities/budget.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'job' })
 export class Job {
@@ -29,4 +38,16 @@ export class Job {
 
   @OneToOne(() => Budget, budget => budget.job)
   budget: Budget;
+
+  @ManyToOne(() => User, user => user.jobs)
+  owner: User;
+
+  @Column()
+  ownerId: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
