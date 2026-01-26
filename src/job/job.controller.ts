@@ -6,12 +6,14 @@ import {
   UseGuards,
   Param,
   Req,
+  Patch,
 } from '@nestjs/common';
 import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { JobResponseDto } from './dto/response-job.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import type { AuthenticatedRequest } from 'src/types/authenticated-request-type';
+import { UpdateJobDto } from './dto/update-job.dto';
 
 @Controller('job')
 export class JobController {
@@ -38,6 +40,12 @@ export class JobController {
     return jobs.map(job => new JobResponseDto(job));
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Patch('/finished/:id')
+  async finishedJob(@Param('id') id: string, @Body() dto: UpdateJobDto) {
+    const job = await this.jobService.finishJob(id, dto);
+    return new JobResponseDto(job);
+  }
   @Get('/code/:userCode')
   async getByUserCode(@Param('userCode') userCode: string) {
     const job = await this.jobService.findJobByUserCode({ userCode: userCode });

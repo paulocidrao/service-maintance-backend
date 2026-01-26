@@ -5,6 +5,7 @@ import { Budget } from 'src/budget/entities/budget.entity';
 import { CreateJobDto } from './dto/create-job.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { generateRandomCode } from 'src/utils/randomcode';
+import { UpdateJobDto } from './dto/update-job.dto';
 @Injectable()
 export class JobService {
   constructor(
@@ -80,5 +81,10 @@ export class JobService {
       relations: ['owner', 'budget'],
     });
     return jobs;
+  }
+  async finishJob(id: string, dto: UpdateJobDto) {
+    const job = await this.findOneJobFail({ id: id });
+    job.isFinished = dto.isFinished ?? job.isFinished;
+    return this.jobRepository.save(job);
   }
 }
