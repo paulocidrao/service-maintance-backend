@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Job } from './entities/job.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Budget } from 'src/budget/entities/budget.entity';
@@ -85,6 +89,15 @@ export class JobService {
   async finishJob(id: string, dto: UpdateJobDto) {
     const job = await this.findOneJobFail({ id: id });
     job.isFinished = dto.isFinished ?? job.isFinished;
+    return this.jobRepository.save(job);
+  }
+  async updateJob(id: string, dto: UpdateJobDto) {
+    const job = await this.findOneJobFail({ id: id });
+    if (job.isFinished) {
+      throw new BadRequestException('O serviço já foi finalizado!');
+    }
+    job.description = dto.description ?? job.description;
+    job.deliveryDate = dto.deliveryDate ?? job.deliveryDate;
     return this.jobRepository.save(job);
   }
 }

@@ -7,6 +7,7 @@ import {
   Param,
   Req,
   Patch,
+  Put,
 } from '@nestjs/common';
 import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
@@ -49,6 +50,13 @@ export class JobController {
   @Get('/code/:userCode')
   async getByUserCode(@Param('userCode') userCode: string) {
     const job = await this.jobService.findJobByUserCode({ userCode: userCode });
+    return new JobResponseDto(job);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('/update/:id')
+  async updateJob(@Param('id') id: string, @Body() dto: UpdateJobDto) {
+    const job = await this.jobService.updateJob(id, dto);
     return new JobResponseDto(job);
   }
 }
