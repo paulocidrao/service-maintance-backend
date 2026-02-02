@@ -50,6 +50,11 @@ export class UserService {
     return new UserResponseDto(user);
   }
 
+  async deleteUser(id: string) {
+    const user = await this.findOne(id);
+    await this.userRepository.delete(user.id);
+  }
+
   async findUserByEmail(email: string) {
     const user = await this.userRepository.findOneBy({ email });
     if (!user) {

@@ -39,10 +39,12 @@ export class Job {
   @OneToOne(() => Budget, budget => budget.job)
   budget: Budget;
 
-  @ManyToOne(() => User, user => user.jobs)
+  @ManyToOne(() => User, user => user.jobs, {
+    onDelete: 'SET NULL',
+  })
   owner: User;
 
-  @Column()
+  @Column({ nullable: true })
   ownerId: string;
 
   @CreateDateColumn()
