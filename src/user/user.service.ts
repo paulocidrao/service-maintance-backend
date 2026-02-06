@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HashServer } from 'src/commom/Hash/hashService';
-import { UserResponseDto } from './dto/response-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -47,7 +47,7 @@ export class UserService {
     if (!user) {
       throw new ConflictException('Usuário não encontrado!');
     }
-    return new UserResponseDto(user);
+    return user;
   }
 
   async deleteUser(id: string) {
@@ -61,5 +61,13 @@ export class UserService {
       throw new ConflictException('Usuário não encontrado!');
     }
     return user;
+  }
+
+  async UpdateUser(id: string, userData: UpdateUserDto) {
+    const user = await this.findOne(id);
+
+    user.email = userData.email ?? user.email;
+    user.phone = userData.phone ?? user.phone;
+    return this.userRepository.save(user);
   }
 }

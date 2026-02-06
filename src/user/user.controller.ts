@@ -7,11 +7,14 @@ import {
   Req,
   Delete,
   HttpCode,
+  Patch,
+  Param,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import type { AuthenticatedRequest } from 'src/types/authenticated-request-type';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -32,5 +35,10 @@ export class UserController {
   @HttpCode(204)
   async deleteUser(@Req() req: AuthenticatedRequest) {
     return this.userService.deleteUser(req.user.id);
+  }
+  @UseGuards(JwtAuthGuard)
+  @Patch('update/:id')
+  async updateUser(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+    return await this.userService.UpdateUser(id, dto);
   }
 }
