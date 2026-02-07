@@ -42,8 +42,8 @@ export class UserService {
     const created = await this.userRepository.save(newUser);
     return created;
   }
-  async findOne(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
+  async findOne(userData: Partial<User>) {
+    const user = await this.userRepository.findOneBy(userData);
     if (!user) {
       throw new ConflictException('Usuário não encontrado!');
     }
@@ -51,7 +51,7 @@ export class UserService {
   }
 
   async deleteUser(id: string) {
-    const user = await this.findOne(id);
+    const user = await this.findOne({ id });
     await this.userRepository.delete(user.id);
   }
 
@@ -64,7 +64,7 @@ export class UserService {
   }
 
   async UpdateUser(id: string, userData: UpdateUserDto) {
-    const user = await this.findOne(id);
+    const user = await this.findOne({ id });
 
     user.email = userData.email ?? user.email;
     user.phone = userData.phone ?? user.phone;

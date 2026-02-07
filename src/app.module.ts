@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { BudgetModule } from './budget/budget.module';
 import { JobModule } from './job/job.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -35,6 +36,15 @@ import { JobModule } from './job/job.module';
         };
       },
     }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.MAIL_HOST || 'localhost',
+        port: parseInt(process.env.MAIL_PORT || '1025', 10),
+        secure: false,
+        ignoreTLS: true,
+      },
+    }),
+    MailerModule,
   ],
   controllers: [],
   providers: [],

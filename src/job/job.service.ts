@@ -5,19 +5,25 @@ import {
 } from '@nestjs/common';
 import { Job } from './entities/job.entity';
 import { DataSource, Repository } from 'typeorm';
+import { MailService } from '../sendMail/mail.service';
 import { Budget } from 'src/budget/entities/budget.entity';
 import { CreateJobDto } from './dto/create-job.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { generateRandomCode } from 'src/utils/randomcode';
 import { UpdateJobDto } from './dto/update-job.dto';
+import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 @Injectable()
 export class JobService {
   constructor(
     @InjectRepository(Job)
     private readonly jobRepository: Repository<Job>,
     private readonly dataSource: DataSource,
+    private readonly mailService: MailService,
+    private readonly userService: UserService,
   ) {}
-  async create(userId: string, dto: CreateJobDto, workerName: string) {
+  async create(userData: Partial<User>, dto: CreateJobDto, workerName: string) {
+    const user = await this.userService.findOne(userData);
     const newService: CreateJobDto = {
       clientName: dto.clientName,
       userEmail: dto.userEmail,
@@ -35,12 +41,18 @@ export class JobService {
         ...newService,
         isFinished: false,
         workerName: workerName,
-        ownerId: userId,
+        ownerId: user.id,
         userCode: generateRandomCode(),
         budget: saveBudget,
       });
       return await manager.save(service);
     });
+    await this.mailService.sendMail(
+      user.email,
+      created.userEmail,
+      created.userCode,
+    );
+
     return created;
   }
 

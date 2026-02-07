@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   async validate(payload: JwtPayload) {
-    const user = await this.userService.findOne(payload.sub);
+    const user = await this.userService.findOne({ id: payload.sub });
     if (!user) {
       throw new UnauthorizedException('Você precisa estar logado!');
     }

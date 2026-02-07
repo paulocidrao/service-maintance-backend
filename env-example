@@ -1,0 +1,16 @@
+DB_TYPE=
+DB_HOST=
+DB_PORT=
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE=
+
+DB_SYNCHRONIZE=
+DB_AUTO_LOAD_ENTITIES=
+
+REDIRECT_TO_YOUR_SERVICE=
+MAIL_PORT=
+MAIL_HOST=
+
+JWT_SECRET_KEY=
+JWT_EXPIRATION=                                                                                                                                                                                                           

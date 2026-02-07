@@ -27,7 +27,7 @@ export class JobController {
     @Body() createJobDto: CreateJobDto,
   ) {
     const job = await this.jobService.create(
-      req.user.id,
+      { id: req.user.id },
       createJobDto,
       req.user.name,
     );

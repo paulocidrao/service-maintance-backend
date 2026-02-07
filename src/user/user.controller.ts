@@ -28,7 +28,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get('me')
   findMe(@Req() req: AuthenticatedRequest) {
-    return this.userService.findOne(req.user.id);
+    return this.userService.findOne({ id: req.user.id });
   }
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
