@@ -65,8 +65,19 @@ export class JobService {
     return job;
   }
 
-  async findOneJob(jobData: Partial<Job>) {
+  private async findOneJob(jobData: Partial<Job>) {
     const job = await this.jobRepository.findOne({
+      where: {
+        ...jobData,
+      },
+      relations: ['budget'],
+    });
+    return job;
+  }
+
+  async findJobById(jobData: Partial<Job>) {
+    const job = await this.findOneJobFail(jobData);
+    await this.jobRepository.findOne({
       where: {
         ...jobData,
       },

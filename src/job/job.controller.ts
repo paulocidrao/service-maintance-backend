@@ -40,6 +40,12 @@ export class JobController {
     const jobs = await this.jobService.findAllJobs(req.user.id);
     return jobs.map(job => new JobResponseDto(job));
   }
+  @UseGuards(JwtAuthGuard)
+  @Get('/get/:id')
+  async getJobById(@Param('id') id: string) {
+    const job = await this.jobService.findJobById({ id });
+    return new JobResponseDto(job);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Patch('/finished/:id')
