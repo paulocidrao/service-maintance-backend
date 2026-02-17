@@ -13,6 +13,8 @@ import { generateRandomCode } from 'src/utils/randomcode';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
+import { PaginationDTO } from 'src/pagination/pagination.dto';
+import { JobResponseDto } from './dto/response-job.dto';
 @Injectable()
 export class JobService {
   constructor(
@@ -97,8 +99,9 @@ export class JobService {
     });
     return job;
   }
-  async findAllJobs(ownerId: string) {
-    const jobs = await this.jobRepository.find({
+  async findAllJobs(ownerId: string, pagination: PaginationDTO) {
+    const { perPage = 10, page = 0 } = pagination;
+    const [jobs, total] = await this.jobRepository.findAndCount({
       where: {
         ownerId,
       },
@@ -106,8 +109,17 @@ export class JobService {
         createdAt: 'DESC',
       },
       relations: ['owner', 'budget'],
+      take: perPage,
+      skip: page,
     });
-    return jobs;
+    const totalPages = Math.ceil(total / perPage);
+    return {
+      data: jobs.map(job => new JobResponseDto(job)),
+      total,
+      perPage,
+      page,
+      totalPages,
+    };
   }
   async finishJob(id: string, dto: UpdateJobDto) {
     const job = await this.findOneJobFail({ id: id });

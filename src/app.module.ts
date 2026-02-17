@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { BudgetModule } from './budget/budget.module';
 import { JobModule } from './job/job.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { PaginationModule } from './pagination/pagination.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
       },
     }),
     MailerModule,
+    PaginationModule,
   ],
   controllers: [],
   providers: [],
